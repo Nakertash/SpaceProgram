@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" class="w-100 h-100">
+  <head>
+    <meta charset="utf-8">
+    <title>title</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <!--<script src="script.js"></script>-->
+  </head>
+  <body class="w-100 h-100">
+    <header class="bg-secondary-subtle text-body-tertiary d-flex justify-content-start  align-items-center">
+        <div class="h-100 d-flex flex-column justify-content-around" style="margin-right: 1vw;">
+            <div class="h-25 d-flex flex-row align-items-center"><img src="icons/coin.svg" class="h-100"/><h1 id="coinsValue">100000</h1></div>
+            <div class="h-25 d-flex flex-row align-items-center"><img src="icons/people.svg" class="h-100"/><h1 id="peopleValue">100</h1></div>            
+            <div class="h-25 d-flex flex-row align-items-center"><img src="icons/planet.svg" class="h-100"/><h1 id="planetsValue">100000</h1></div>            
+        </div>
+        <div class="h-100 d-flex flex-column justify-content-around">
+            <div class="h-25 d-flex flex-row align-items-center"><img src="icons/rocket.svg" class="h-100"/><h1 id="shipsValue">100000</h1></div>        
+            <div class="h-25 d-flex flex-row align-items-center"></div>        
+            <div class="h-25 d-flex flex-row align-items-center"></div>        
+        </div>
+    </header>
+    <div class="w-100" style="height:90% !important;">
+        <div class="tabClass bg-dark text-light tab-pane fade d-flex flex-row justify-content-center align-items-center show active" id="pills-shuttle" role="tabpanel" aria-labelledby="pills-shuttle-tab">
+            <div class="h-100 w-50" style="background-color: rgb(73, 80, 87);"><h2>Свободные шаттлы</h2></div>
+            <div class="h-100 w-50"><h2>Отправленные шаттлы</h2></div>
+        </div>
+        <div class="tabClass bg-dark text-light tab-pane fade" id="pills-observatory" role="tabpanel" aria-labelledby="pills-observatory-tab">
+            <h2>observatory</h2>
+        </div>
+        <div class="tabClass bg-dark text-light tab-pane fade" id="pills-lunar" role="tabpanel" aria-labelledby="pills-lunar-tab">
+            <h2>lunar</h2>
+        </div>
+    </div>
+    <footer class="bg-secondary text-body-tertiary d-flex justify-content-around  align-items-center">
+        <div class="h-100 w-75 d-flex justify-content-around  align-items-center" id="pills-tab" role="tablist">
+            <button class="btn btn-secondary active h-100" id="pills-shuttle-tab" data-bs-toggle="pill" data-bs-target="#pills-shuttle" type="button" role="tab" aria-controls="pills-shuttle" aria-selected="true">
+                <img class="w-100 h-100" src="icons/spaceShuttle.svg"/>
+            </button>
+            <button class="btn btn-secondary h-100" id="pills-lunar-tab" data-bs-toggle="pill" data-bs-target="#pills-lunar" type="button" role="tab" aria-controls="pills-lunar" aria-selected="false">
+                <img class="w-100 h-100" src="icons/lunar-module.svg"/>
+            </button>
+            <button class="btn btn-secondary h-100" id="pills-observatory-tab" data-bs-toggle="pill" data-bs-target="#pills-observatory" type="button" role="tab" aria-controls="pills-observatory" aria-selected="false">
+                <img class="w-100 h-100" src="icons/observatory.svg"/>
+            </button>
+            
+        </div>
+    </footer>
+    <script>
+        let playerData={
+            coins:1000,
+            employees:[],
+            planets:[],
+            ships:[],
+        };
+    </script>
+    <script>
+        function UpdateCoins(){
+            $("#coinsValue").text(playerData.coins);
+        }
+        function UpdateEmployees(){
+            $("#peopleValue").text(playerData.employees.length);
+        }
+        function UpdatePlanets(){
+            $("#planetsValue").text(playerData.planets.length);
+        }
+        function UpdateShips(){
+            $("#shipsValue").text(playerData.ships.length);
+        }
+    </script>
+    <script>
+        
+        $(function(){
+            UpdateCoins();
+            UpdateEmployees();
+            UpdatePlanets();
+            UpdateShips();
+        });
+    </script>
+    
+  </body>
+</html>
