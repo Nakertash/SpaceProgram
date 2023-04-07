@@ -1,0 +1,10 @@
+.myTable:hover {
+  color: var(--bs-gray-300)!important;
+}
+
+.myTable {
+  color: var(--bs-gray-100)!important;
+  --bs-table-hover-color: var(--bs-gray-400)!important;
+}
+
+/*# sourceMappingURL=styles.css.map */

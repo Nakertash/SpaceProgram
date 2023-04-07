@@ -4,12 +4,15 @@
     <meta charset="utf-8">
     <title>title</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <!--<script src="script.js"></script>-->
   </head>
-  <body class="w-100 h-100">
+  <body class="w-100 h-100 bg-dark">
     <header class="bg-secondary-subtle text-body-tertiary d-flex justify-content-start  align-items-center">
         <div class="h-100 d-flex flex-column justify-content-around" style="margin-right: 1vw;">
             <div class="h-25 d-flex flex-row align-items-center"><img src="icons/coin.svg" class="h-100"/><h1 id="coinsValue">100000</h1></div>
@@ -22,10 +25,61 @@
             <div class="h-25 d-flex flex-row align-items-center"></div>        
         </div>
     </header>
-    <div class="w-100" style="height:90% !important;">
+    <div class="w-100 tab-content tabClass" style="height:90% !important;">
         <div class="tabClass bg-dark text-light tab-pane fade d-flex flex-row justify-content-center align-items-center show active" id="pills-shuttle" role="tabpanel" aria-labelledby="pills-shuttle-tab">
-            <div class="h-100 w-50" style="background-color: rgb(73, 80, 87);"><h2>Свободные шаттлы</h2></div>
-            <div class="h-100 w-50"><h2>Отправленные шаттлы</h2></div>
+            <div class="h-100 w-50" style="background-color: rgb(73, 80, 87);">
+                <h2>Свободные шаттлы</h2>
+                <div class="row">
+                    <button class="btn btn-success w-25">Купить новый шаттл</button>
+                </div>
+                <table id="freeShuttles" class="table  myTable table-bordered table-hover dataTable dtr-inline text-light" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting" tabindex="0" aria-controls="freeShuttles" rowspan="1" colspan="1" aria-label="activate to sort column descending">
+                                
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="freeShuttles" rowspan="1" colspan="1" aria-label="activate to sort column descending">
+                                Название
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="freeShuttles" rowspan="1" colspan="1" aria-label="activate to sort column descending">
+                                Вместимость
+                            </th>
+                            <th tabindex="0" aria-controls="freeShuttles" rowspan="1" colspan="1">
+                                Жилой модуль
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="h-100 w-50">
+                <h2>Отправленные шаттлы</h2>
+                <table id="launchShuttle" class="table table-bordered table-hover dataTable dtr-inline myTable" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting" tabindex="0" aria-controls="freeShuttles" rowspan="1" colspan="1" aria-label="activate to sort column descending">
+                                
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="freeShuttles" rowspan="1" colspan="1" aria-label="activate to sort column descending">
+                                Название
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="freeShuttles" rowspan="1" colspan="1" aria-label="activate to sort column descending">
+                                Вместимость
+                            </th>
+                            <th tabindex="0" aria-controls="freeShuttles" rowspan="1" colspan="1">
+                                Жилой модуль
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
         </div>
         <div class="tabClass bg-dark text-light tab-pane fade" id="pills-observatory" role="tabpanel" aria-labelledby="pills-observatory-tab">
             <h2>observatory</h2>
@@ -45,7 +99,6 @@
             <button class="btn btn-secondary h-100" id="pills-observatory-tab" data-bs-toggle="pill" data-bs-target="#pills-observatory" type="button" role="tab" aria-controls="pills-observatory" aria-selected="false">
                 <img class="w-100 h-100" src="icons/observatory.svg"/>
             </button>
-            
         </div>
     </footer>
     <script>
@@ -53,8 +106,10 @@
             coins:1000,
             employees:[],
             planets:[],
-            ships:[],
+            ships:[{Type:"r",Name:"Рокета илона макса",CrewsCount:10,LiveModule:false,Filled:0,Launched:false},
+            {Type:"s",Name:"Шаттл илона макса",CrewsCount:20,LiveModule:true,Filled:0,Launched:true}],
         };
+        let freeShuttles;
     </script>
     <script>
         function UpdateCoins(){
@@ -69,14 +124,211 @@
         function UpdateShips(){
             $("#shipsValue").text(playerData.ships.length);
         }
+        function InitiateFreeShuttleTable(){
+            freeShuttles = $("#freeShuttles").DataTable({
+            "data":playerData.ships,
+            "select": {
+                style: "single"
+            },
+            "order": [[0, "asc"]],
+            "searching": false,
+            "scrollCollapse": true,
+            "processing": true,
+            "stateSave": false,
+            "lengthChange": false,
+            "autoWidth": false,
+            "paging": true,
+            "pageLength": 10,
+            "info": false,
+            "dom": "<'row'<'col-6'f><'col-6'l>>" +
+                "t" +
+                "p",
+            "columns": [
+                {
+                    "width": "5%",
+                    "data": "Type",
+                },
+                {
+                    "width": "45%",
+                    "data": "Name",
+                },
+                {
+                    "width": "30%",
+                    "data": "CrewsCount",
+                },
+                {
+                    "width": "20%",
+                    "data": "LiveModule",
+                }
+            ],
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": [0],
+                    "render": function (data, type, row, meta) {
+                        console.log(data);
+                        
+                        if(data=="r")
+                        {
+                            return `<img src="icons/rocketWhite.svg" class="w-100"/>`;
+                        }else{
+                            return `<img src="icons/spaceShuttle.svg" class="w-100"/>`;
+                        }
+                        
+                    }
+                },
+                {
+                    "targets": [3],
+                    "render": function (data, type, row, meta) {
+                        if(data)
+                        {
+                            return `<img src="icons/ok.svg" style="width:1vw;"/>`;
+
+                        }else{
+                            return `<img src="icons/notOk.svg" style="width:1vw;"/>`;
+
+                        }
+                    }
+                }
+            ],
+            "language": {
+                "decimal": "",
+                "emptyTable": "Счета не обнаружены",
+                "info": "Показано с _START_ по _END_ из _TOTAL_ записей",
+                "infoEmpty": "Показано с 0 по 0 из 0 записей",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Показано _MENU_ записей",
+                "loadingRecords": "Загрузка...",
+                "processing": "Обработка...",
+                "search": "Поиск:",
+                "zeroRecords": "По вашему запросу ничего не найдено",
+                "paginate": {
+                    "first": "Первая",
+                    "last": "Посл.",
+                    "next": "След.",
+                    "previous": "Пред."
+                },
+                "aria": {
+                    "sortAscending": ": используйте, чтобы отсортировать значения в колонке по возрастанию",
+                    "sortDescending": ": используйте, чтобы отсортировать значения в колонке по убыванию"
+                }
+            },
+            "createdRow": function (row, data, index) {
+                if (data.Launched ==true) {
+                    $(row).hide();
+                }
+            },
+        });
+        }
+        function InitiateLaunchShuttleTable(){
+            freeShuttles = $("#launchShuttle").DataTable({
+            "data":playerData.ships,
+            "select": {
+                style: "single"
+            },
+            "order": [[0, "asc"]],
+            "searching": false,
+            "scrollCollapse": true,
+            "processing": true,
+            "stateSave": false,
+            "lengthChange": false,
+            "autoWidth": false,
+            "paging": true,
+            "pageLength": 10,
+            "info": false,
+            "dom": "<'row'<'col-6'f><'col-6'l>>" +
+                "t" +
+                "p",
+            "columns": [
+                {
+                    "width": "5%",
+                    "data": "Type",
+                },
+                {
+                    "width": "45%",
+                    "data": "Name",
+                },
+                {
+                    "width": "30%",
+                    "data": "CrewsCount",
+                },
+                {
+                    "width": "20%",
+                    "data": "LiveModule",
+                }
+            ],
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": [0],
+                    "render": function (data, type, row, meta) {
+                        console.log(data);
+                        
+                        if(data=="r")
+                        {
+                            return `<img src="icons/rocketWhite.svg" class="w-100"/>`;
+                        }else{
+                            return `<img src="icons/spaceShuttle.svg" class="w-100"/>`;
+                        }
+                        
+                    }
+                },
+                {
+                    "targets": [3],
+                    "render": function (data, type, row, meta) {
+                        if(data)
+                        {
+                            return `<img src="icons/ok.svg" style="width:1vw;"/>`;
+
+                        }else{
+                            return `<img src="icons/notOk.svg" style="width:1vw;"/>`;
+
+                        }
+                    }
+                }
+            ],
+            "language": {
+                "decimal": "",
+                "emptyTable": "Счета не обнаружены",
+                "info": "Показано с _START_ по _END_ из _TOTAL_ записей",
+                "infoEmpty": "Показано с 0 по 0 из 0 записей",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Показано _MENU_ записей",
+                "loadingRecords": "Загрузка...",
+                "processing": "Обработка...",
+                "search": "Поиск:",
+                "zeroRecords": "По вашему запросу ничего не найдено",
+                "paginate": {
+                    "first": "Первая",
+                    "last": "Посл.",
+                    "next": "След.",
+                    "previous": "Пред."
+                },
+                "aria": {
+                    "sortAscending": ": используйте, чтобы отсортировать значения в колонке по возрастанию",
+                    "sortDescending": ": используйте, чтобы отсортировать значения в колонке по убыванию"
+                }
+            },
+            "createdRow": function (row, data, index) {
+                if (data.Launched ==false) {
+                    $(row).hide();
+                }
+            },
+        });
+        }
     </script>
     <script>
-        
         $(function(){
             UpdateCoins();
             UpdateEmployees();
             UpdatePlanets();
             UpdateShips();
+            InitiateFreeShuttleTable();
+            InitiateLaunchShuttleTable();
         });
     </script>
     
